@@ -76,15 +76,22 @@ public class Eventos {
 
 					if (((matrix[a][b].getTipo()==1) || (matrix[a][b].getTipo()==3))&& (matrix[a][b].getIdade()>9) ){
 						
+						if (matrix[a][b].getTipo()==1) {
+							dados.subDoentes();
+						}else {
+							dados.subSadios();
+						}
 						matrix[a][b] = null;
 						
 					}else if ((matrix[a][b].getTipo()==2) && (matrix[a][b].getIdade()>3) ){
 						
+						dados.subPseudoImunes();
 						matrix[a][b] =null;
 						
 					}else if ((matrix[a][b].getTipo()==0) && (matrix[a][b].getIdade()>2) ){
 						
-						 matrix[a][b] =null;
+						dados.subDoentes();
+						matrix[a][b] =null;
 					}
 				}
 				

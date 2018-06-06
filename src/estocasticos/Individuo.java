@@ -21,6 +21,8 @@ public class Individuo {
 	}
 
 	public void setTipo(int tipo) {
+		//muda o tempo de vida possivel?
+		this.idade = 0;
 		this.tipo = tipo;
 	}
 
@@ -41,6 +43,7 @@ public class Individuo {
 	}
 	
 	public void addIdade() {
+		
 		this.idade ++;
 	}
 	

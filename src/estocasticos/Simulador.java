@@ -1,9 +1,12 @@
 package estocasticos;
 
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+
+import javax.swing.SwingConstants;
 
 /*
  * 0-infectado
@@ -20,21 +23,47 @@ public class Simulador {
 	
 	public static void main(String[] args) {
 		
-		int n = 100;
+		int n = 10;
 		int interacaoes= 1000;
 		
-		String caminhoArquivo = "C:\\Desenvolvimento\\Estocaticos\\";
+		Dados dados = new Dados();
 		
+		Individuo matrix[][] = new Individuo[n][n];
+
+		
+		/*
+		 * criando arquivo
+		 */
+		
+		String caminhoArquivo = "C:\\Desenvolvimento\\Estocaticos\\";
+
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		
 		Date data = new Date();
 		
 		String arquivo = caminhoArquivo+formato.format(data)+".csv";
 		
-		Dados dados = new Dados();
+		try {
+			FileWriter escrevedor = new FileWriter(arquivo,true);
+			
+			escrevedor.write("imunes;"
+					+ "pseudo_imunes;"
+					+ "infectantes gerados;"
+					+ "doentes;"
+					+ "acidentados;"
+					+ "sadios;"
+					+ "nacimentos");
+			escrevedor.write("\n");
+						
+			//escrevedor.flush();
+			escrevedor.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		Individuo matrix[][] = new Individuo[n][n];
-
+		/*
+		 * Iniciando a simulacao aqui
+		 */
 		System.out.println("****** Processos Estocasticos *******");
 		
 		setup(matrix, dados);
@@ -96,49 +125,117 @@ public class Simulador {
 
 	private static void infectar(Individuo[][] matrix, Dados dados) {
 		
-
+		Random r= new Random();
+				
 		//procurar por individuos infectados
 		ArrayList<int[]> posicaoInfectados = new ArrayList<>();
 		
 		posicaoInfectados = Utils.procuraIndividuo(matrix, 0);
-		System.out.println(" infectados lista = "+posicaoInfectados.size());
+		//System.out.println(" infectados lista = "+posicaoInfectados.size());
 		//infectar os proximos
 		for (int i = 0; i < posicaoInfectados.size(); i++) {
 			int linha = (posicaoInfectados.get(0))[0];
 			int coluna= (posicaoInfectados.get(0))[1];
-						
+			
+			System.out.print("Possivel infectante gerado >> ");	
+					
+			
 			if (coluna!=0) {
 				
 				if (matrix[linha][coluna-1] !=null) {
-					matrix[linha][coluna-1].setTipo(0);
-					dados.addInfectantesGerados();
-					System.out.println("infectante gerado");	
+					
+					if(matrix[linha][coluna-1].getTipo()==2) {
+						
+						if (r.nextInt(100)>30) {
+							
+							matrix[linha][coluna-1].setTipo(0);
+							dados.addInfectantesGerados();
+							System.out.println("infectante gerado");
+						}
+							
+						
+					}else if(matrix[linha][coluna-1].getTipo()==3){
+						matrix[linha][coluna-1].setTipo(0);
+						dados.addInfectantesGerados();
+						System.out.println("infectante gerado");
+					}					
+					
 				}
 				
 			}
 			
 			if(coluna!=matrix.length-1) {
-				if (matrix[linha][coluna+1] != null) {
-					matrix[linha][coluna+1].setTipo(0);
-					dados.addInfectantesGerados();
-					System.out.println("infectante gerado");	
+				
+				if (matrix[linha][coluna+1] !=null) {
+					
+					if(matrix[linha][coluna+1].getTipo()==2) {
+						
+						if (r.nextInt(100)>30) {
+							
+							matrix[linha][coluna+1].setTipo(0);
+							dados.addInfectantesGerados();
+							System.out.println("infectante gerado");
+						}
+							
+						
+					}else if(matrix[linha][coluna+1].getTipo()==3){
+						matrix[linha][coluna+1].setTipo(0);
+						dados.addInfectantesGerados();
+						System.out.println("infectante gerado");
 					}
+					
+					
+				}
+				
+				
 			}
 			
 			if (linha!=0) {
-				if(matrix[linha-1][coluna]!=null){
-					matrix[linha-1][coluna].setTipo(0);
-					dados.addInfectantesGerados();
-					System.out.println("infectante gerado");	
-					}
+				
+				if (matrix[linha-1][coluna] !=null) {
+					
+					if(matrix[linha-1][coluna].getTipo()==2) {
+						
+						if (r.nextInt(100)>30) {
+							
+							matrix[linha-1][coluna].setTipo(0);
+							dados.addInfectantesGerados();
+							System.out.println("infectante gerado");
+						}
+							
+						
+					}else if(matrix[linha-1][coluna].getTipo()==3){
+						matrix[linha-1][coluna].setTipo(0);
+						dados.addInfectantesGerados();
+						System.out.println("infectante gerado");
+					}					
+					
+				}
+				
 			}
 			
 			if(linha!=matrix.length-1) {
-				if (matrix[linha+1][coluna]!=null) {
-					matrix[linha+1][coluna].setTipo(0);
-					dados.addInfectantesGerados();
-					System.out.println("infectante gerado");	
-					}
+				
+				if (matrix[linha+1][coluna] !=null) {
+					
+					if(matrix[linha+1][coluna].getTipo()==2) {
+						
+						if (r.nextInt(100)>30) {
+							
+							matrix[linha+1][coluna].setTipo(0);
+							dados.addInfectantesGerados();
+							System.out.println("infectante gerado");
+						}
+							
+						
+					}else if(matrix[linha+1][coluna].getTipo()==3){
+						matrix[linha+1][coluna].setTipo(0);
+						dados.addInfectantesGerados();
+						System.out.println("infectante gerado");
+					}					
+					
+				}
+				
 			}
 			
 			caminhar(matrix, linha, coluna);	

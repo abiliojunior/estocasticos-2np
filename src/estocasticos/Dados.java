@@ -32,11 +32,27 @@ public class Dados {
 	public void addImunes() {
 		this.imunes ++;
 	}
+	public void subImunes() {
+		if(imunes-1<0) {
+			this.imunes = 0;
+		}else {
+			this.imunes --;
+		}
+		
+	}
 	public int getPseudoImunes() {
 		return pseudoImunes;
 	}
 	public void addPseudoImunes() {
 		this.pseudoImunes ++;
+	}
+	public void subPseudoImunes() {
+		
+		if(pseudoImunes-1<0) {
+			this.pseudoImunes = 0;
+		}else {
+			this.pseudoImunes --;
+		}
 	}
 	public int getInfectantesGerados() {
 		return infectantesGerados;
@@ -45,11 +61,20 @@ public class Dados {
 		this.infectantesGerados ++;
 		addDoentes();
 	}
+
 	public int getDoentes() {
 		return doentes;
 	}
 	public void addDoentes() {
 		this.doentes ++;
+	}
+	public void subDoentes() {
+		
+		if(doentes-1<0) {
+			this.doentes = 0;
+		}else {
+			this.doentes --;
+		}
 	}
 	public int getAcidentados() {
 		return acidentados;
@@ -57,11 +82,19 @@ public class Dados {
 	public void addAcidentados() {
 		this.acidentados ++;
 	}
+
 	public int getSadios() {
 		return sadios;
 	}
 	public void addSadios() {
 		this.sadios ++;
+	}
+	public void subSadios() {
+		if(sadios-1<0) {
+			this.sadios = 0;
+		}else {
+			this.sadios --;
+		}
 	}
 	public int getNascimentos() {
 		return nascimentos;
