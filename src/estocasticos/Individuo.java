@@ -9,6 +9,7 @@ public class Individuo {
 	public Individuo(int tipo) {
 		super();
 		this.tipo = tipo;
+		
 	}
 	
 	public Individuo() {
@@ -40,7 +41,7 @@ public class Individuo {
 	}
 	
 	public void addIdade() {
-		this.idade = idade+1;
+		this.idade ++;
 	}
 	
 	public String print() {

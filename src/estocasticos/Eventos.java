@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Eventos {
 	
-	public static void acidente(Individuo[][] matrix) {
+	public static void acidente(Individuo[][] matrix, Dados dados) {
 
 		/*
 		 * Pode ocorrer acidente. Isso ocorre antes de iniciar a próxima atualização:
@@ -20,6 +20,7 @@ public class Eventos {
 			for (int b = 0; b < matrix[a].length; b++) {
 				if ((matrix[a][b] != null) & (random.nextInt(100)<10)) {
 					matrix[a][b] = null;
+					dados.addAcidentados();
 				}
 			}
 		}
@@ -28,7 +29,8 @@ public class Eventos {
 	}
 	
 	
-	public static void nascimentos(Individuo[][] matrix) {
+	public static void nascimentos(Individuo[][] matrix, Dados dados) {
+		
 		//TODO Criar o metodo 
 		/*
 		 * Isso ocorre antes de iniciar a próxima atualização. As células que não contém 
@@ -46,9 +48,13 @@ public class Eventos {
 			for (int b = 0; b < matrix[a].length; b++) {
 				if ((matrix[a][b] == null) & (random.nextInt(100)<80)) {
 					if (random.nextBoolean()){
-						matrix[a][b] = new Individuo(2);
+						matrix[a][b] = new Individuo(1);
+						dados.addImunes();
+						dados.addNascimentos();
 					}else {
-						 matrix[a][b] = new Individuo(3);
+						 matrix[a][b] = new Individuo(2);
+						 dados.addPseudoImunes();
+						 dados.addNascimentos();
 					}
 				}
 			}
@@ -56,7 +62,7 @@ public class Eventos {
 	}
 
 
-	public static void mortes(Individuo[][] matrix) {
+	public static void mortes(Individuo[][] matrix, Dados dados) {
 		
 		//Os sadios ou imunes normalmente morrem após 10 atualizações (10 passos) ou acidentes
 		// Os pseudo-imunes morrem após 4 atualizações ou acidente
@@ -64,15 +70,25 @@ public class Eventos {
 		
 		for (int a = 0; a < matrix.length; a++) {
 			for (int b = 0; b < matrix[a].length; b++) {
-				if (((matrix[a][b].getTipo()==1) || (matrix[a][b].getTipo()==3))&& (matrix[a][b].getIdade()>9) ){
-					matrix[a][b] =null;
+				
+					
+				if (matrix[a][b]!=null) {
+
+					if (((matrix[a][b].getTipo()==1) || (matrix[a][b].getTipo()==3))&& (matrix[a][b].getIdade()>9) ){
+						
+						matrix[a][b] = null;
+						
+					}else if ((matrix[a][b].getTipo()==2) && (matrix[a][b].getIdade()>3) ){
+						
+						matrix[a][b] =null;
+						
+					}else if ((matrix[a][b].getTipo()==0) && (matrix[a][b].getIdade()>2) ){
+						
+						 matrix[a][b] =null;
+					}
 				}
-				if ((matrix[a][b].getTipo()==2) && (matrix[a][b].getIdade()>3) ){
-					matrix[a][b] =null;
-				}
-				if ((matrix[a][b].getTipo()==0) && (matrix[a][b].getIdade()>2) ){
-					matrix[a][b] =null;
-				}
+				
+				
 			}
 		}
 		

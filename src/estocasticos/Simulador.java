@@ -1,6 +1,8 @@
 package estocasticos;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 /*
@@ -14,54 +16,71 @@ import java.util.Random;
 
 public class Simulador {
 
+	
+	
 	public static void main(String[] args) {
-		int n = 10;
-		String arquivo = "C:\\Desenvolvimento\\eclipse-oxygen\\Workspace\\estocastico\\dados.csv";
 		
-		/*
-		 * vetor de dados contendo asinformaçoes.
-		 */
-		int [] dados = null;
+		int n = 100;
+		int interacaoes= 1000;
+		
+		String caminhoArquivo = "C:\\Desenvolvimento\\Estocaticos\\";
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		
+		Date data = new Date();
+		
+		String arquivo = caminhoArquivo+formato.format(data)+".csv";
+		
+		Dados dados = new Dados();
+		
 		Individuo matrix[][] = new Individuo[n][n];
 
-		System.out.println("Processos Estocasticos");
+		System.out.println("****** Processos Estocasticos *******");
 		
-		setup(matrix);
+		setup(matrix, dados);
 		
-		//O indivíduo infectado deverá infectar os seus quatro vizinhos diretos
-		
-		//Processo de infecccao
-		
-		int atualizacoes=0;
-		
-		while (true) {
+		System.out.println("Iniciando Simulaçao");		
+		while (interacaoes>0) {
 			
-			infectar(matrix);
+			infectar(matrix,dados);
 			
-			Eventos.mortes(matrix);
+			Eventos.mortes(matrix,dados);
 			
-			Eventos.acidente(matrix);
+			Eventos.acidente(matrix,dados);
 			
-			Eventos.nascimentos(matrix);
+			Eventos.nascimentos(matrix,dados);
 			
 			Utils.salvarDados(arquivo, dados);
 			
-			atualizacoes++;
+			atualizar(matrix,dados);
 			
-			if (true) {
-				break;
-			}
-			
+			//System.out.println(interacaoes);
+			interacaoes--;
 		}
 		
 		
-		Utils.imprimeMatrix(matrix);
+		//Utils.imprimeMatrix(matrix);
 		System.out.println("Finalizado simulação");
 		
 		
 
 	}
 	
+
+
+	private static void atualizar(Individuo[][] matrix, Dados dados) {
+		
+		for (int a = 0; a < matrix.length; a++) {
+			for (int b = 0; b < matrix[a].length; b++) {
+				if (matrix[a][b]!= null) {
+					matrix[a][b].addIdade();
+				}
+				
+			}
+		}
+		
+	}
+
 
 
 	private static void caminhar(Individuo[][] matrix, int linha, int coluna) {
@@ -75,57 +94,75 @@ public class Simulador {
 	}
 
 
-	private static void infectar(Individuo[][] matrix) {
+	private static void infectar(Individuo[][] matrix, Dados dados) {
+		
 
 		//procurar por individuos infectados
 		ArrayList<int[]> posicaoInfectados = new ArrayList<>();
+		
 		posicaoInfectados = Utils.procuraIndividuo(matrix, 0);
-		//System.out.println(posicaoInfectados.size());
+		System.out.println(" infectados lista = "+posicaoInfectados.size());
 		//infectar os proximos
 		for (int i = 0; i < posicaoInfectados.size(); i++) {
 			int linha = (posicaoInfectados.get(0))[0];
 			int coluna= (posicaoInfectados.get(0))[1];
-			
-			
-			//System.out.println("("+ linha + "," + coluna + ")");
-			
+						
 			if (coluna!=0) {
 				
-				matrix[linha][coluna-1].setTipo(0);
+				if (matrix[linha][coluna-1] !=null) {
+					matrix[linha][coluna-1].setTipo(0);
+					dados.addInfectantesGerados();
+					System.out.println("infectante gerado");	
+				}
+				
 			}
 			
 			if(coluna!=matrix.length-1) {
-				matrix[linha][coluna+1].setTipo(0);
+				if (matrix[linha][coluna+1] != null) {
+					matrix[linha][coluna+1].setTipo(0);
+					dados.addInfectantesGerados();
+					System.out.println("infectante gerado");	
+					}
 			}
 			
 			if (linha!=0) {
-				matrix[linha-1][coluna].setTipo(0);
+				if(matrix[linha-1][coluna]!=null){
+					matrix[linha-1][coluna].setTipo(0);
+					dados.addInfectantesGerados();
+					System.out.println("infectante gerado");	
+					}
 			}
 			
 			if(linha!=matrix.length-1) {
-				matrix[linha+1][coluna].setTipo(0);
+				if (matrix[linha+1][coluna]!=null) {
+					matrix[linha+1][coluna].setTipo(0);
+					dados.addInfectantesGerados();
+					System.out.println("infectante gerado");	
+					}
 			}
 			
-			caminhar(matrix, linha, coluna);			
+			caminhar(matrix, linha, coluna);	
 		}
 		
 	}
 
 
 
-	private static void setup(Individuo[][] matrix) {
+	private static void setup(Individuo[][] matrix, Dados dados) {
 		System.out.println("Setup Iniciado");
 
-		int posiçaoAuxilar[] = Utils.posicaoAleatoriaLivre(matrix);
-		
+				
 		Utils.pushAleatoriaoMatriz(matrix, new Individuo(0));
+		dados.addDoentes();
 		
 		Random random= new Random();
 		int imunes = random.nextInt(matrix.length-1);
+		
 		//System.out.println(imunes);
 		
 		for (int i = 0; i < imunes; i++) {
 			Utils.pushAleatoriaoMatriz(matrix, new Individuo(1));
+			dados.addImunes();
 		}
 		
 		
@@ -134,17 +171,17 @@ public class Simulador {
 		
 		for (int i = 0; i < pseudoImunes; i++) {
 			Utils.pushAleatoriaoMatriz(matrix, new Individuo(2));
+			dados.addPseudoImunes();
 		}
 		
 		int sadios = matrix.length-imunes-pseudoImunes-1;
 		//System.out.println(sadios);
 		
-		Utils.preencherMatrixSadios(matrix);
+		Utils.preencherMatrixSadios(matrix, dados);
 		
 		//Utils.imprimeMatrix(matrix);
 		System.out.println("Setup Finalizado");
 	}
-	
 	
 
 }

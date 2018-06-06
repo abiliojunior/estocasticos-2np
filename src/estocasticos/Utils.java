@@ -1,7 +1,11 @@
 package estocasticos;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -11,12 +15,18 @@ public class Utils {
 	// 1. Individou,
 	// 2. Infectado
 		public static ArrayList<int[]> procuraIndividuo(Individuo[][] matrix,int tipo) {
+
+
 			ArrayList<int[]> listaInfectados = new ArrayList<>();
 			for (int a = 0; a < matrix.length; a++) {
 				for (int b = 0; b < matrix[a].length; b++) {
-					if (matrix[a][b].getTipo() == tipo) {
-						int [] e= {a,b};
-						listaInfectados.add(e);
+					if (matrix[a][b]!= null) {
+						if (matrix[a][b].getTipo() == tipo) {
+							int [] e= {a,b};
+							listaInfectados.add(e);	
+						}
+						
+						
 					}
 				}
 			}
@@ -39,12 +49,13 @@ public class Utils {
 	
 	
 	//Preencge a matrix com individuos sadios
-	public static void preencherMatrixSadios(Individuo[][] matrix) {
+	public static void preencherMatrixSadios(Individuo[][] matrix, Dados dados) {
 		
 		for (int a = 0; a < matrix.length; a++) {
 			for (int b = 0; b < matrix[a].length; b++) {
 				if (matrix[a][b] == null) {
 					matrix[a][b] = new Individuo(3);
+					dados.addSadios();
 				}
 			}
 		}
@@ -67,7 +78,7 @@ public class Utils {
 			}
 		}
 		//System.out.println(posicoesVazias);
-		posicoesVazias= posicoesVazias;
+		//posicoesVazias= posicoesVazias;
 		
 		//gerar umnumero aleatorio com base no sespaços livres
 		Random random= new Random();
@@ -121,9 +132,26 @@ public class Utils {
 	}
 
 
-	public static void salvarDados(String file, int[] dados) {
-		File f = new File(file);
+	public static void salvarDados(String file, Dados dados) {
 		
-		System.out.println("salvando");
+		File f = new File(file);
+		String dado = dados.getImunes()+";"
+					+ dados.getPseudoImunes()+";"
+					+ dados.getInfectantesGerados()+";"
+					+ dados.getDoentes()+";"
+					+ dados.getAcidentados()+";"
+					+ dados.getSadios()+";"
+					+ dados.getNascimentos()+"\n";
+		try {
+			FileWriter escrevedor = new FileWriter(f,true);
+			
+			escrevedor.write(dado);
+			//escrevedor.write("\n");
+						
+			//escrevedor.flush();
+			escrevedor.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
