@@ -1,10 +1,15 @@
 package estocasticos;
 
+import java.util.Random;
+
 public class Individuo {
+	
+	Random r = new Random();
 	
 	private int[] posicao= {-1,-1};
 	private int tipo = 3;
 	private int idade = 0;
+	
 
 	public Individuo(int tipo) {
 		super();

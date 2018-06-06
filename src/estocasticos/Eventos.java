@@ -19,8 +19,26 @@ public class Eventos {
 		for (int a = 0; a < matrix.length; a++) {
 			for (int b = 0; b < matrix[a].length; b++) {
 				if ((matrix[a][b] != null) & (random.nextInt(100)<10)) {
+										
+					switch (matrix[a][b].getTipo()) {
+					case 0:
+						dados.subDoentes();
+						break;
+					case 1:
+						dados.subImunes();
+						break;
+					case 2:
+						dados.subPseudoImunes();
+						break;
+					case 3:
+						dados.subSadios();
+						break;
+
+					}
+					
 					matrix[a][b] = null;
 					dados.addAcidentados();
+				
 				}
 			}
 		}
@@ -73,11 +91,11 @@ public class Eventos {
 				
 					
 				if (matrix[a][b]!=null) {
-
+					
 					if (((matrix[a][b].getTipo()==1) || (matrix[a][b].getTipo()==3))&& (matrix[a][b].getIdade()>9) ){
 						
 						if (matrix[a][b].getTipo()==1) {
-							dados.subDoentes();
+							dados.subImunes();
 						}else {
 							dados.subSadios();
 						}

@@ -21,9 +21,12 @@ public class Simulador {
 
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args ) {
 		
-		int n = 10;
+//		int n = Integer.parseInt(args[0]);
+//		int interacaoes= Integer.parseInt(args[1]);
+		
+		int n = 100;
 		int interacaoes= 1000;
 		
 		Dados dados = new Dados();
@@ -68,7 +71,9 @@ public class Simulador {
 		
 		setup(matrix, dados);
 		
-		System.out.println("Iniciando Simulaçao");		
+		System.out.println("Iniciando Simulaçao"+new Date());
+		
+		int bInteracoes = interacaoes;
 		while (interacaoes>0) {
 			
 			infectar(matrix,dados);
@@ -83,13 +88,12 @@ public class Simulador {
 			
 			atualizar(matrix,dados);
 			
-			//System.out.println(interacaoes);
 			interacaoes--;
 		}
 		
 		
 		//Utils.imprimeMatrix(matrix);
-		System.out.println("Finalizado simulação");
+		System.out.println("Finalizado simulação"+new Date());
 		
 		
 
@@ -131,13 +135,11 @@ public class Simulador {
 		ArrayList<int[]> posicaoInfectados = new ArrayList<>();
 		
 		posicaoInfectados = Utils.procuraIndividuo(matrix, 0);
-		//System.out.println(" infectados lista = "+posicaoInfectados.size());
+
 		//infectar os proximos
 		for (int i = 0; i < posicaoInfectados.size(); i++) {
 			int linha = (posicaoInfectados.get(0))[0];
 			int coluna= (posicaoInfectados.get(0))[1];
-			
-			System.out.print("Possivel infectante gerado >> ");	
 					
 			
 			if (coluna!=0) {
@@ -150,14 +152,14 @@ public class Simulador {
 							
 							matrix[linha][coluna-1].setTipo(0);
 							dados.addInfectantesGerados();
-							System.out.println("infectante gerado");
+							
 						}
 							
 						
 					}else if(matrix[linha][coluna-1].getTipo()==3){
 						matrix[linha][coluna-1].setTipo(0);
 						dados.addInfectantesGerados();
-						System.out.println("infectante gerado");
+						
 					}					
 					
 				}
@@ -174,14 +176,14 @@ public class Simulador {
 							
 							matrix[linha][coluna+1].setTipo(0);
 							dados.addInfectantesGerados();
-							System.out.println("infectante gerado");
+							
 						}
 							
 						
 					}else if(matrix[linha][coluna+1].getTipo()==3){
 						matrix[linha][coluna+1].setTipo(0);
 						dados.addInfectantesGerados();
-						System.out.println("infectante gerado");
+						
 					}
 					
 					
@@ -200,14 +202,14 @@ public class Simulador {
 							
 							matrix[linha-1][coluna].setTipo(0);
 							dados.addInfectantesGerados();
-							System.out.println("infectante gerado");
+							
 						}
 							
 						
 					}else if(matrix[linha-1][coluna].getTipo()==3){
 						matrix[linha-1][coluna].setTipo(0);
 						dados.addInfectantesGerados();
-						System.out.println("infectante gerado");
+						
 					}					
 					
 				}
@@ -224,14 +226,14 @@ public class Simulador {
 							
 							matrix[linha+1][coluna].setTipo(0);
 							dados.addInfectantesGerados();
-							System.out.println("infectante gerado");
+							
 						}
 							
 						
 					}else if(matrix[linha+1][coluna].getTipo()==3){
 						matrix[linha+1][coluna].setTipo(0);
 						dados.addInfectantesGerados();
-						System.out.println("infectante gerado");
+						
 					}					
 					
 				}
