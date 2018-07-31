@@ -1,0 +1,7 @@
+ imunes     pseudo_imunes  infectantes_gerados    doentes       acidentados        sadios         nacimentos  
+ Min.   : 104   Min.   : 625   Min.   : 1.00       Min.   : 1.00   Min.   :  0.0   Min.   :  87.0   Min.   :   0  
+ 1st Qu.:6183   1st Qu.:3195   1st Qu.:14.00       1st Qu.:34.00   1st Qu.:819.0   1st Qu.:  87.0   1st Qu.:1860  
+ Median :6228   Median :3230   Median :18.00       Median :43.00   Median :843.0   Median :  87.0   Median :1892  
+ Mean   :5769   Mean   :3095   Mean   :18.66       Mean   :44.87   Mean   :838.4   Mean   : 712.5   Mean   :1831  
+ 3rd Qu.:6265   3rd Qu.:3265   3rd Qu.:22.00       3rd Qu.:51.00   3rd Qu.:867.0   3rd Qu.:  87.0   3rd Qu.:1930  
+ Max.   :6432   Max.   :3791   Max.   :42.00       Max.   :91.00   Max.   :982.0   Max.   :9270.0   Max.   :3847  
