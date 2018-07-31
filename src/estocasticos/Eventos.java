@@ -14,6 +14,7 @@ public class Eventos {
 		 * célula varrida (número randômico, Y) com os 10%. Assim, Se Y< 10% então
 		 * morre, senão permanece vivo.
 		 */
+		
 		Random random= new Random();
 		
 		for (int a = 0; a < matrix.length; a++) {
@@ -49,7 +50,7 @@ public class Eventos {
 	
 	public static void nascimentos(Individuo[][] matrix, Dados dados) {
 		
-		//TODO Criar o metodo 
+		 
 		/*
 		 * Isso ocorre antes de iniciar a próxima atualização. As células que não contém 
 		 * indivíduos devido à ocorrência de mortes, contém um percentual de 80% que é 
@@ -69,10 +70,12 @@ public class Eventos {
 						matrix[a][b] = new Individuo(1);
 						dados.addImunes();
 						dados.addNascimentos();
+						
 					}else {
 						 matrix[a][b] = new Individuo(2);
 						 dados.addPseudoImunes();
 						 dados.addNascimentos();
+						 
 					}
 				}
 			}

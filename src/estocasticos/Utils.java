@@ -22,7 +22,7 @@ public class Utils {
 				for (int b = 0; b < matrix[a].length; b++) {
 					if (matrix[a][b]!= null) {
 						if (matrix[a][b].getTipo() == tipo) {
-							int [] e= {a,b};
+							int [] e = {a,b};
 							listaInfectados.add(e);	
 						}
 						
@@ -53,12 +53,14 @@ public class Utils {
 		
 		for (int a = 0; a < matrix.length; a++) {
 			for (int b = 0; b < matrix[a].length; b++) {
+				
 				if (matrix[a][b] == null) {
 					matrix[a][b] = new Individuo(3);
-					dados.addSadios();
+					
 				}
 			}
 		}
+		
 		
 	}
 	
@@ -73,12 +75,12 @@ public class Utils {
 			for (int b = 0; b < matrix[a].length; b++) {
 				if (matrix[a][b] == null) {
 					posicoesVazias ++; 
-					//System.out.println(posicoesVazias);
+					
 				}
 			}
 		}
-		//System.out.println(posicoesVazias);
-		//posicoesVazias= posicoesVazias;
+		
+		
 		
 		//gerar umnumero aleatorio com base no sespaços livres
 		Random random= new Random();
@@ -116,21 +118,25 @@ public class Utils {
 	
 	//imprime a matrix
 	public static void imprimeMatrix(Individuo[][] matrix) {
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				if (matrix[i][j] == null) {
-					System.out.print(" ");
-					System.out.print(" ");
-				}else {
-					System.out.print(matrix[i][j].print());
-					System.out.print(" ");
-				}
-				
-			}	
+		if (true) {
+
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix[i].length; j++) {
+					if (matrix[i][j] == null) {
+						System.out.print(" ");
+						System.out.print(" ");
+					}else {
+						System.out.print(matrix[i][j].print());
+						System.out.print(" ");
+					}
+					
+					
+				}	
+				System.out.println("");
+			}
 			System.out.println("");
 		}
 	}
-
 
 	public static void salvarDados(String file, Dados dados) {
 		
@@ -153,5 +159,36 @@ public class Utils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public static void atualizaDadosSetup(Individuo[][] matrix, Dados dados) {
+		for (int a = 0; a < matrix.length; a++) {
+			for (int b = 0; b < matrix[a].length; b++) {
+				
+				switch (matrix[a][b].getTipo()) {
+				case 0:
+					dados.addInfectantesGerados();
+					break;
+				
+				case 1:
+					dados.addImunes();
+					break;
+					
+				case 2:
+					dados.addPseudoImunes();
+					break;
+						
+				case 3:
+					dados.addSadios();	
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+		}
+		
 	}
 }

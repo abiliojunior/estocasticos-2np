@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import javax.swing.SwingConstants;
-
 /*
  * 0-infectado
  * 1-imunes
@@ -26,7 +24,7 @@ public class Simulador {
 //		int n = Integer.parseInt(args[0]);
 //		int interacaoes= Integer.parseInt(args[1]);
 		
-		int n = 100;
+		int n = 10;
 		int interacaoes= 1000;
 		
 		Dados dados = new Dados();
@@ -51,7 +49,7 @@ public class Simulador {
 			
 			escrevedor.write("imunes;"
 					+ "pseudo_imunes;"
-					+ "infectantes gerados;"
+					+ "infectantes_gerados;"
 					+ "doentes;"
 					+ "acidentados;"
 					+ "sadios;"
@@ -71,11 +69,16 @@ public class Simulador {
 		
 		setup(matrix, dados);
 		
+		Utils.imprimeMatrix(matrix);
+		
 		System.out.println("Iniciando Simulaçao"+new Date());
 		
-		int bInteracoes = interacaoes;
+		Utils.salvarDados(arquivo, dados);
+		
+		
 		while (interacaoes>0) {
 			
+				
 			infectar(matrix,dados);
 			
 			Eventos.mortes(matrix,dados);
@@ -89,10 +92,15 @@ public class Simulador {
 			atualizar(matrix,dados);
 			
 			interacaoes--;
+			
+			dados.zerar();
+			
+			Utils.imprimeMatrix(matrix);
+			
 		}
 		
 		
-		//Utils.imprimeMatrix(matrix);
+		Utils.imprimeMatrix(matrix);
 		System.out.println("Finalizado simulação"+new Date());
 		
 		
@@ -122,25 +130,97 @@ public class Simulador {
 		
 		Random random= new Random();
 		int aleatorio = random.nextInt(4);
+		int novaPosicao [] = {linha,coluna};
+		int atualPosicao [] = {linha,coluna};
+		
+		switch (aleatorio) {
+		case 0:
+			
+			if(linha!=0) {
+				novaPosicao [0] = linha-1;
+				novaPosicao [1] = coluna;
+				atualPosicao [0] = linha;
+				atualPosicao [1] = coluna;
+				
+				
+				trocaPosicao(matrix, atualPosicao, novaPosicao);
+
+			}
+						
+			break;
+		case 1:
+			if(coluna!=matrix.length-1) {
+				novaPosicao [0] = linha;
+				novaPosicao [1] = coluna+1;
+				atualPosicao [0] = linha;
+				atualPosicao [1] = coluna;
+				
+				
+				trocaPosicao(matrix, atualPosicao, novaPosicao);
+
+			}
+			
+						
+			break;
+		case 2:
+			if(linha==matrix.length-1) {
+				break;
+			}
+			novaPosicao [0] = linha+1;
+			novaPosicao [1] = coluna;
+			atualPosicao [0] = linha;
+			atualPosicao [1] = coluna;
+			
+			
+			trocaPosicao(matrix, atualPosicao, novaPosicao);
+	
+			break;
+		case 3:
+			if(coluna==0) {
+				break;
+			}
+			novaPosicao [0] = (linha);
+			novaPosicao [1] = coluna-1;
+			atualPosicao [0] = linha;
+			atualPosicao [1] = coluna;
+			
+			trocaPosicao(matrix, atualPosicao, novaPosicao);
+
+			break;		
+		default:
+			
+			break;
+		}
 		
 		
 	}
 
 
-	private static void infectar(Individuo[][] matrix, Dados dados) {
+	private static void trocaPosicao(Individuo[][] matrix, int[] atualPosicao, int[] novaPosicao) {
+		Individuo posAuxiliar = matrix[novaPosicao[0]][novaPosicao[1]];
+		matrix[novaPosicao[0]][novaPosicao[1]]=matrix[atualPosicao[0]][atualPosicao[1]];
+		matrix[atualPosicao[0]][atualPosicao[1]]= posAuxiliar;
 		
+		
+	}
+
+
+
+	private static void infectar(Individuo[][] matrix, Dados dados) {
+		int taxa = 100;
 		Random r= new Random();
 				
 		//procurar por individuos infectados
 		ArrayList<int[]> posicaoInfectados = new ArrayList<>();
 		
 		posicaoInfectados = Utils.procuraIndividuo(matrix, 0);
-
+		
+		
 		//infectar os proximos
 		for (int i = 0; i < posicaoInfectados.size(); i++) {
-			int linha = (posicaoInfectados.get(0))[0];
-			int coluna= (posicaoInfectados.get(0))[1];
-					
+			int linha = (posicaoInfectados.get(i))[0];
+			int coluna= (posicaoInfectados.get(i))[1];
+				
 			
 			if (coluna!=0) {
 				
@@ -148,17 +228,19 @@ public class Simulador {
 					
 					if(matrix[linha][coluna-1].getTipo()==2) {
 						
-						if (r.nextInt(100)>30) {
+						if (r.nextInt(100)>taxa) {
 							
 							matrix[linha][coluna-1].setTipo(0);
 							dados.addInfectantesGerados();
-							
+							dados.subPseudoImunes();
+														
 						}
 							
 						
 					}else if(matrix[linha][coluna-1].getTipo()==3){
 						matrix[linha][coluna-1].setTipo(0);
 						dados.addInfectantesGerados();
+						
 						
 					}					
 					
@@ -172,10 +254,11 @@ public class Simulador {
 					
 					if(matrix[linha][coluna+1].getTipo()==2) {
 						
-						if (r.nextInt(100)>30) {
+						if (r.nextInt(100)>taxa) {
 							
 							matrix[linha][coluna+1].setTipo(0);
 							dados.addInfectantesGerados();
+							dados.subPseudoImunes();
 							
 						}
 							
@@ -183,6 +266,7 @@ public class Simulador {
 					}else if(matrix[linha][coluna+1].getTipo()==3){
 						matrix[linha][coluna+1].setTipo(0);
 						dados.addInfectantesGerados();
+						
 						
 					}
 					
@@ -198,10 +282,11 @@ public class Simulador {
 					
 					if(matrix[linha-1][coluna].getTipo()==2) {
 						
-						if (r.nextInt(100)>30) {
+						if (r.nextInt(100)<taxa) {
 							
 							matrix[linha-1][coluna].setTipo(0);
 							dados.addInfectantesGerados();
+							dados.subPseudoImunes();
 							
 						}
 							
@@ -209,6 +294,7 @@ public class Simulador {
 					}else if(matrix[linha-1][coluna].getTipo()==3){
 						matrix[linha-1][coluna].setTipo(0);
 						dados.addInfectantesGerados();
+						
 						
 					}					
 					
@@ -222,10 +308,11 @@ public class Simulador {
 					
 					if(matrix[linha+1][coluna].getTipo()==2) {
 						
-						if (r.nextInt(100)>30) {
+						if (r.nextInt(100)>taxa) {
 							
 							matrix[linha+1][coluna].setTipo(0);
 							dados.addInfectantesGerados();
+							dados.subPseudoImunes();
 							
 						}
 							
@@ -233,7 +320,7 @@ public class Simulador {
 					}else if(matrix[linha+1][coluna].getTipo()==3){
 						matrix[linha+1][coluna].setTipo(0);
 						dados.addInfectantesGerados();
-						
+												
 					}					
 					
 				}
@@ -249,36 +336,31 @@ public class Simulador {
 
 	private static void setup(Individuo[][] matrix, Dados dados) {
 		System.out.println("Setup Iniciado");
-
-				
+		int tamanho = matrix.length*matrix.length;
+		
 		Utils.pushAleatoriaoMatriz(matrix, new Individuo(0));
-		dados.addDoentes();
-		
+
+		//setup imunes
 		Random random= new Random();
-		int imunes = random.nextInt(matrix.length-1);
-		
-		//System.out.println(imunes);
-		
+		int imunes = random.nextInt(tamanho-1);
 		for (int i = 0; i < imunes; i++) {
 			Utils.pushAleatoriaoMatriz(matrix, new Individuo(1));
-			dados.addImunes();
+			
+			
 		}
 		
-		
-		int pseudoImunes = random.nextInt(matrix.length-imunes-1);
-		//System.out.println(pseudoImunes);
-		
+		//setup  pseudo imunes
+		int pseudoImunes = random.nextInt(tamanho-imunes-1);
 		for (int i = 0; i < pseudoImunes; i++) {
 			Utils.pushAleatoriaoMatriz(matrix, new Individuo(2));
-			dados.addPseudoImunes();
+			
 		}
-		
-		int sadios = matrix.length-imunes-pseudoImunes-1;
-		//System.out.println(sadios);
+				
 		
 		Utils.preencherMatrixSadios(matrix, dados);
 		
-		//Utils.imprimeMatrix(matrix);
+		Utils.atualizaDadosSetup(matrix, dados);
+
 		System.out.println("Setup Finalizado");
 	}
 	

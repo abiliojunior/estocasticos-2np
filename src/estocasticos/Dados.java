@@ -35,7 +35,7 @@ public class Dados {
 	public void subImunes() {
 		if(imunes-1<0) {
 			this.imunes = 0;
-			System.out.println("error Imunes");
+			//System.out.println("error Imunes");
 		}else {
 			this.imunes --;
 		}
@@ -51,7 +51,7 @@ public class Dados {
 		
 		if(pseudoImunes-1<0) {
 			this.pseudoImunes = 0;
-			System.out.println("error Pseudo imunes");
+			//System.out.println("error Pseudo imunes");
 		}else {
 			this.pseudoImunes --;
 		}
@@ -74,7 +74,7 @@ public class Dados {
 		
 		if(doentes-1<0) {
 			this.doentes = 0;
-			System.out.println("error doentes");
+			//System.out.println("error doentes");
 		}else {
 			this.doentes --;
 		}
@@ -94,7 +94,7 @@ public class Dados {
 	}
 	public void subSadios() {
 		if(sadios-1<0) {
-			System.out.println("error sadios");
+			//System.out.println("error sadios");
 			this.sadios = 0;
 		}else {
 			this.sadios --;
@@ -105,6 +105,16 @@ public class Dados {
 	}
 	public void addNascimentos() {
 		this.nascimentos ++;
+	}
+	public void zerar() {
+		//this.imunes=0;
+		//this.pseudoImunes=0;
+		this.infectantesGerados=0;
+		//this.doentes=0;
+		this.acidentados=0;
+		//this.sadios=0;
+		this.nascimentos=0;
+		
 	}
 	
 	
